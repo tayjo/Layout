@@ -35,9 +35,20 @@ public class LayoutTest {
 		}
 		my_array[0][0] = 2;
 		assertNotEquals(my_array[0][0], my_layout.contents[0][0]);
-		// What if my_array.length = 0?
 	}
-
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testLayoutIntArrayArrayException1() {
+		int[][] zero_rows = new int[0][5];
+		new Layout(zero_rows);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testLayoutIntArrayArrayException2() {
+		int[][] zero_cols = new int[5][0];
+		new Layout(zero_cols);
+	}
+	
 	@Test
 	public void testLayoutIntArray() {
 		int[] my_1d_array = {1, 2, 3, 4, 5};
@@ -200,9 +211,24 @@ public class LayoutTest {
 		fail("Not yet implemented");
 	}
 
-	@Test
-	public void testSlice() {
-		fail("Not yet implemented");
+	@Test(expected=IllegalArgumentException.class)
+	public void testSliceException1() {
+		first_layout.slice(-1, 2, 1, 2);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testSliceException2() {
+		first_layout.slice(3, 2, 1, 2);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testSliceException3() {
+		first_layout.slice(0, 2, 1, 5);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testSliceException4() {
+		first_layout.slice(0, 2, 2, 0);
 	}
 
 	@Test

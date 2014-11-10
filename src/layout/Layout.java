@@ -142,7 +142,7 @@ public class Layout {
 
 	public Layout slice(int firstRow, int lastRow, int firstColumn, int lastColumn){
 		//15 Returns a new Layout containing values from the given portion of the recipient Layout.
-		return null;
+		return rows(firstRow, lastRow).columns(firstColumn, lastColumn);
 	}
 
 	public Layout replace(Layout layout, int row, int column){
