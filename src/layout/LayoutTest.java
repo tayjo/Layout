@@ -98,7 +98,19 @@ public class LayoutTest {
 
 	@Test
 	public void testTranspose() {
-		fail("Not yet implemented");
+		int[][] first_array = { {1, 2, 3},
+								{4, 5, 6},
+								{7, 8, 9},
+								{10, 11, 12} };
+		Layout first_layout = new Layout(first_array);
+		int[][] second_array = { {1, 4, 7, 10},
+						 		 {2, 5, 8, 11},
+						 		 {3, 6, 9, 12} };
+		Layout second_layout = new Layout(second_array);
+		Layout transpose_layout = first_layout.transpose();
+		assertEquals(second_layout, transpose_layout);
+
+		// Maybe try other dimensions or length 0?
 	}
 
 	@Test

@@ -55,7 +55,15 @@ public class Layout {
 
 	public Layout transpose(){
 		//5 Transposes a Layout of m rows and n columns to form a Layout of n rows and m columns. The value in location [i][j] of the Layout become the value in location [j][i] of the new Layout.
-		return null;
+		int[][] transpose = new int[columnCount()][rowCount()];
+		Layout transpose_layout;
+		for (int i = 0; i < transpose.length; i++) {
+			for (int j = 0; j < transpose[0].length; j++) {
+				transpose[i][j] = contents[j][i];
+			}
+		}
+		transpose_layout = new Layout(transpose);
+		return transpose_layout;
 	}
 	
 	public Layout ravel(int n){
