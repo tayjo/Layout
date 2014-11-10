@@ -61,7 +61,34 @@ public class LayoutTest {
 
 	@Test
 	public void testRotateRight() {
-		fail("Not yet implemented");
+		int[][] first_array = { {1, 2, 3},
+								{4, 5, 6},
+								{7, 8, 9},
+								{10, 11, 12} };
+		Layout first_layout = new Layout(first_array);
+		int[][] one_rotate = { {10, 7, 4, 1},
+							   {11, 8, 5, 2},
+							   {12, 9, 6, 3} };
+		Layout layout_one = new Layout(one_rotate);
+		Layout rotated_once = first_layout.rotateRight();
+		assertEquals(layout_one, rotated_once);
+		int[][] two_rotate = { {12, 11, 10},
+							   {9, 8, 7},
+							   {6, 5, 4},
+							   {3, 2, 1} };
+		Layout layout_two = new Layout(two_rotate);
+		Layout rotated_twice = rotated_once.rotateRight();
+		assertEquals(layout_two, rotated_twice);
+		int[][] three_rotate = { {3, 6, 9, 12},
+								 {2, 5, 8, 11},
+							     {1, 4, 7, 10} };
+		Layout layout_three = new Layout(three_rotate);
+		Layout rotated_thrice = rotated_twice.rotateRight();
+		assertEquals(layout_three, rotated_thrice);
+		Layout rotated_fourth = rotated_thrice.rotateRight();
+		assertEquals(rotated_fourth, first_layout);
+		
+		// Maybe try length 0?
 	}
 
 	@Test

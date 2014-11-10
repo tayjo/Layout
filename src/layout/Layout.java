@@ -37,7 +37,15 @@ public class Layout {
 	
 	public Layout rotateRight(){
 		//3 Returns a new Layout which is "rotated" a quarter-turn clockwise.
-		return null;
+		int[][] rotated = new int[columnCount()][rowCount()];
+		Layout rotated_layout;
+		for (int i = 0; i < rotated.length; i++) {
+			for (int j = 0; j < rotated[0].length; j++) {
+				rotated[i][j] = at(rotated[0].length - 1 - j, i);
+			}
+		}
+		rotated_layout = new Layout(rotated);
+		return rotated_layout;
 	}
 
 	public Layout rotateLeft(){
@@ -77,12 +85,12 @@ public class Layout {
 	
 	public int rowCount(){
 		//11 Returns the number of rows in the Layout. For a one-dimensional Layout, this returns 1.
-		return 0;
+		return contents.length;
 	}
 	
 	public int columnCount(){
 		//12 Returns the number of columns in the Layout. For a one-dimensional Layout, this is the number of values in the Layout.
-		return 0;
+		return contents[0].length;
 	}
 	
 	public Layout rows(int firstRow, int lastRow){
@@ -108,7 +116,21 @@ public class Layout {
 	@Override
 	public boolean equals(Object o){
 		//17 Returns true if and only if this Layout contains an array of the same shape and containing the same values as Object o.
-		return false;
+		if (!(o instanceof Layout)) {
+			return false;
+		}
+		Layout that = (Layout) o;
+		if (rowCount() != that.rowCount() || (columnCount() != that.columnCount())) {
+			return false;
+		}
+		for (int i = 0; i < rowCount(); i++) {
+			for (int j = 0; j < columnCount(); j++) {
+				if (at(i, j) != that.at(i, j)) {
+					return false;
+				}
+			}
+		}		
+		return true;
 	}
 	
 	@Override
@@ -129,6 +151,6 @@ public class Layout {
 	
 	public int at(int row, int column){
 		//21 Returns the integer at the given row and column.
-		return 0;
+		return contents[row][column];
 	}
 }
