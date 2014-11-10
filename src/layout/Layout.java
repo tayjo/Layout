@@ -24,7 +24,10 @@ public class Layout {
 	
 	public Layout(int length){
 		//1 Creates an Layout of length integers, and fills it with the numbers 1 to length.
-		
+		contents = new int[1][length];
+		for (int j = 0; j < length; ) {
+			contents[0][j] = ++j;
+		}
 	}
 	
 	public Layout reverse(){

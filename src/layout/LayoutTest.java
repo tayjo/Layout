@@ -46,7 +46,12 @@ public class LayoutTest {
 
 	@Test
 	public void testLayoutInt() {
-		fail("Not yet implemented");
+		int length = 12;
+		Layout my_layout = new Layout(length);
+		for (int j = 0; j < length; j++) {
+			assertEquals(j + 1, my_layout.contents[0][j]);
+		}
+		// What if length = 0?
 	}
 
 	@Test
