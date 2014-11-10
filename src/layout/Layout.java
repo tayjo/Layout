@@ -90,7 +90,20 @@ public class Layout {
 
 	public Layout join(Layout layout){
 		//9 Adjoins a Layout with n rows and m1 columns to the parameter Layout with n rows and m2 columns, forming a new Layout with n rows and m1+m2 columns. This method throws an IllegalArgumentException if the input Layouts do not have the same number of rows.
-		return null;
+		if (rowCount() != layout.rowCount()) {
+			throw new IllegalArgumentException();
+		}
+		int[][] joined = new int[rowCount()][columnCount() + layout.columnCount()];
+		for (int i = 0; i < rowCount(); i++){
+			for (int j = 0; j < columnCount(); j++) {
+				joined[i][j] = at(i, j);
+			}
+			for (int j = columnCount(); j < joined[0].length; j++) {
+				joined[i][j] = layout.at(i, j - columnCount());
+			}
+		}
+		Layout joined_layout = new Layout(joined);
+		return joined_layout;
 	}
 	
 	public Layout stack(Layout layout){

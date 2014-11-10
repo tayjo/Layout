@@ -129,7 +129,32 @@ public class LayoutTest {
 
 	@Test
 	public void testJoin() {
-		fail("Not yet implemented");
+		int[][] second_array = { {13},
+								 {14},
+								 {15},
+								 {16} };
+		Layout second_layout = new Layout(second_array);
+		int[][] joined = { {1, 2, 3, 13},
+						   {4, 5, 6, 14},
+						   {7, 8, 9, 15},
+						   {10, 11, 12, 16} };
+		Layout joined_layout = new Layout(joined);
+		assertEquals(joined_layout, first_layout.join(second_layout));
+		int[][] empty_array = { {},
+								{},
+								{},
+								{} };
+		Layout empty_layout = new Layout(empty_array);
+		assertEquals(first_layout, first_layout.join(empty_layout));
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testJoinException() {
+		int[][] second_array = { {1, 2, 3},
+								 {4, 5, 6},
+								 {7, 8, 9} };
+		Layout second_layout = new Layout(second_array);
+		first_layout.join(second_layout);
 	}
 
 	@Test
