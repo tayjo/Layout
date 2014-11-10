@@ -174,9 +174,27 @@ public class LayoutTest {
 
 	@Test
 	public void testRows() {
-		fail("Not yet implemented");
+		int[][] rows = { {4, 5, 6},
+						 {7, 8, 9} };
+		Layout rows_layout = new Layout(rows);
+		assertEquals(rows_layout, first_layout.rows(1, 2));
 	}
 
+	@Test(expected=IllegalArgumentException.class)
+	public void testRowsException1() {
+		first_layout.rows(-1, 2);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testRowsException2() {
+		first_layout.rows(2, 5);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testRowsException3() {
+		first_layout.rows(2, 1);
+	}
+	
 	@Test
 	public void testColumns() {
 		fail("Not yet implemented");

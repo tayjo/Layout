@@ -24,6 +24,7 @@ public class Layout {
 	
 	public Layout(int length){
 		//1 Creates an Layout of length integers, and fills it with the numbers 1 to length.
+		if (length == 0) throw new IllegalArgumentException();
 		contents = new int[1][length];
 		for (int j = 0; j < length; ) {
 			contents[0][j] = ++j;
@@ -41,7 +42,7 @@ public class Layout {
 		Layout rotated_layout;
 		for (int i = 0; i < rotated.length; i++) {
 			for (int j = 0; j < rotated[0].length; j++) {
-				rotated[i][j] = at(rotated[0].length - 1 - j, i);
+				rotated[i][j] = at(rowCount() - 1 - j, i);
 			}
 		}
 		rotated_layout = new Layout(rotated);
@@ -90,9 +91,7 @@ public class Layout {
 
 	public Layout join(Layout layout){
 		//9 Adjoins a Layout with n rows and m1 columns to the parameter Layout with n rows and m2 columns, forming a new Layout with n rows and m1+m2 columns. This method throws an IllegalArgumentException if the input Layouts do not have the same number of rows.
-		if (rowCount() != layout.rowCount()) {
-			throw new IllegalArgumentException();
-		}
+		if (rowCount() != layout.rowCount()) throw new IllegalArgumentException();
 		int[][] joined = new int[rowCount()][columnCount() + layout.columnCount()];
 		for (int i = 0; i < rowCount(); i++){
 			for (int j = 0; j < columnCount(); j++) {
@@ -123,7 +122,17 @@ public class Layout {
 	
 	public Layout rows(int firstRow, int lastRow){
 		//13 Returns a new Layout containing values from row firstRow to row lastRow, inclusive, of the recipient Layout.
-		return null;
+		if (firstRow < 0 || (lastRow >= rowCount()) || (lastRow < firstRow)) {
+			throw new IllegalArgumentException();
+		}
+		int[][] rows = new int[lastRow - firstRow + 1][columnCount()];
+		for (int i = firstRow; i <= lastRow; i++) {
+			for (int j = 0; j < columnCount(); j++) {
+				rows[i - firstRow][j] = at(i, j);
+			}
+		}
+		Layout rows_layout = new Layout(rows);
+		return rows_layout;
 	}
 
 	public Layout columns(int firstColumn, int lastColumn){
