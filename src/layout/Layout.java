@@ -73,7 +73,14 @@ public class Layout {
 
 	public Layout unravel(){
 		//7 Takes a m by n two dimensional Layout and returns a one-dimensional Layout of size m × n containing the same numbers. The first n numbers of the new Layout are copied from the first row of the given Layout, the second n numbers from the second row, and so on.
-		return null;
+		int[] unraveled = new int[rowCount() * columnCount()];
+		for (int i = 0; i < rowCount(); i++) {
+			for (int j = 0; j < columnCount(); j++) {
+				unraveled[i * columnCount() + j] = at(i, j);
+			}
+		}
+		Layout unraveled_layout = new Layout(unraveled);
+		return unraveled_layout;
 	}
 
 	public Layout reshape(int n){

@@ -6,6 +6,12 @@ import org.junit.Before;
 import org.junit.Test;
 
 public class LayoutTest {
+	
+	int[][] first_array = { {1, 2, 3},
+							{4, 5, 6},
+							{7, 8, 9},
+							{10, 11, 12} };
+	Layout first_layout = new Layout(first_array);
 
 	@Before
 	public void setUp() throws Exception {
@@ -61,11 +67,6 @@ public class LayoutTest {
 
 	@Test
 	public void testRotateRight() {
-		int[][] first_array = { {1, 2, 3},
-								{4, 5, 6},
-								{7, 8, 9},
-								{10, 11, 12} };
-		Layout first_layout = new Layout(first_array);
 		int[][] one_rotate = { {10, 7, 4, 1},
 							   {11, 8, 5, 2},
 							   {12, 9, 6, 3} };
@@ -98,17 +99,11 @@ public class LayoutTest {
 
 	@Test
 	public void testTranspose() {
-		int[][] first_array = { {1, 2, 3},
-								{4, 5, 6},
-								{7, 8, 9},
-								{10, 11, 12} };
-		Layout first_layout = new Layout(first_array);
-		int[][] second_array = { {1, 4, 7, 10},
+		int[][] transpose = { {1, 4, 7, 10},
 						 		 {2, 5, 8, 11},
 						 		 {3, 6, 9, 12} };
-		Layout second_layout = new Layout(second_array);
-		Layout transpose_layout = first_layout.transpose();
-		assertEquals(second_layout, transpose_layout);
+		Layout transpose_layout = new Layout(transpose);
+		assertEquals(first_layout.transpose(), transpose_layout);
 
 		// Maybe try other dimensions or length 0?
 	}
@@ -120,7 +115,11 @@ public class LayoutTest {
 
 	@Test
 	public void testUnravel() {
-		fail("Not yet implemented");
+		int[] unraveled = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+		Layout unraveled_layout = new Layout(unraveled);
+		assertEquals(first_layout.unravel(), unraveled_layout);
+		
+		// Maybe try length 0?
 	}
 
 	@Test
