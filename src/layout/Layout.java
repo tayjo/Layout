@@ -188,6 +188,9 @@ public class Layout {
 	
 	public int at(int row, int column){
 		//21 Returns the integer at the given row and column.
+		if (row < 0 || (row >= rowCount()) || (column < 0) || (column >= columnCount())) {
+			throw new IllegalArgumentException();
+		}
 		return contents[row][column];
 	}
 }

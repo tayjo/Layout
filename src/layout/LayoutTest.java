@@ -175,7 +175,11 @@ public class LayoutTest {
 
 	@Test
 	public void testRowCount() {
-		fail("Not yet implemented");
+		assertEquals(4, first_layout.rowCount());
+		int[][] second_array = { {1, 2, 3},
+								 {4, 5, 6} };
+		Layout second_layout = new Layout(second_array);
+		assertEquals(2, second_layout.rowCount());
 	}
 
 	@Test
@@ -238,7 +242,17 @@ public class LayoutTest {
 
 	@Test
 	public void testEqualsObject() {
-		fail("Not yet implemented");
+		int[][] second_array = { {1, 2, 3},
+								 {4, 5, 6},
+								 {7, 8, 9},
+								 {10, 11, 12} };
+		Layout second_layout = new Layout(second_array);
+		assertTrue(first_layout.equals(second_layout));
+		int[][] third_array = { {1, 2, 3, 4},
+								{5, 6, 7, 8},
+								{9, 10, 11, 12} };
+		Layout third_layout = new Layout(third_array);
+		assertFalse(first_layout.equals(third_layout));
 	}
 
 	@Test
@@ -253,7 +267,18 @@ public class LayoutTest {
 
 	@Test
 	public void testAt() {
-		fail("Not yet implemented");
+		assertEquals(4, first_layout.at(1,0));
+		assertEquals(9, first_layout.at(2,2));
+		assertEquals(11, first_layout.at(3, 1));
 	}
 
+	@Test(expected=IllegalArgumentException.class)
+	public void testAtException1() {
+		first_layout.at(-1, 0);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testAtException2() {
+		first_layout.at(2, 5);
+	}
 }
