@@ -115,8 +115,15 @@ public class LayoutTest {
 						 		 {3, 6, 9, 12} };
 		Layout transpose_layout = new Layout(transpose);
 		assertEquals(first_layout.transpose(), transpose_layout);
-
-		// Maybe try other dimensions or length 0?
+		int[][] second_array = { {1, 2, 3, 4, 5} };
+		Layout second_layout = new Layout(second_array);
+		int[][] transpose2 = { {1},
+							   {2},
+							   {3},
+							   {4},
+							   {5} };
+		Layout transpose2_layout = new Layout(transpose2);
+		assertEquals(transpose2_layout, second_layout.transpose());
 	}
 
 	@Test
@@ -129,8 +136,6 @@ public class LayoutTest {
 		int[] unraveled = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
 		Layout unraveled_layout = new Layout(unraveled);
 		assertEquals(first_layout.unravel(), unraveled_layout);
-		
-		// Maybe try length 0?
 	}
 
 	@Test
