@@ -257,7 +257,19 @@ public class LayoutTest {
 
 	@Test
 	public void testToArray1D() {
-		fail("Not yet implemented");
+		int[] first_array_1d = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+		for (int i = 0; i < first_layout.rowCount(); i++) {
+			for (int j = 0; j < first_layout.columnCount(); j++) {
+				assertEquals(first_array_1d[i * first_layout.columnCount() + j], first_layout.at(i, j));
+			}
+		}
+		int[] second_array = {5, 4, 3, 2, 1};
+		Layout second_layout = new Layout(second_array);
+		for (int i = 0; i < second_layout.rowCount(); i++) {
+			for (int j = 0; j < second_layout.columnCount(); j++) {
+				assertEquals(second_array[i * second_layout.columnCount() + j], second_layout.at(i, j));
+			}
+		}
 	}
 
 	@Test

@@ -178,7 +178,18 @@ public class Layout {
 	
 	public int[] toArray1D(){
 		//19 Returns a one-dimensional array of the values in the recipient Layout. If the Layout is two-dimensional, it is first unraveled.
-		return null;
+		int[] array_1d = new int[rowCount() * columnCount()];
+		Layout layout_1d;
+		if (rowCount() == 1) {
+			for (int i = 0; i < array_1d.length; i++) {
+				array_1d[i] = contents[0][i];
+			}
+		}
+		else {
+			layout_1d = unravel();
+			array_1d = layout_1d.toArray1D();
+		}
+		return array_1d;
 	}
 	
 	public int[][] toArray2D(){
