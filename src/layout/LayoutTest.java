@@ -2,6 +2,8 @@ package layout;
 
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -41,7 +43,6 @@ public class LayoutTest {
 		}
 		my_array[0][0] = 2;
 		assertNotEquals(my_array[0][0], my_layout.at(0, 0));
-		// What if my_array.length = 0?
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -65,7 +66,12 @@ public class LayoutTest {
 		}
 		my_1d_array[0] = 2;
 		assertNotEquals(my_1d_array[0], my_layout.at(0, 0));
-		// What if my_1d_array.length = 0?
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testLayoutIntArrayException() {
+		int[] empty_1d_array = {};
+		new Layout(empty_1d_array);
 	}
 
 	@Test
@@ -75,7 +81,11 @@ public class LayoutTest {
 		for (int j = 0; j < length; j++) {
 			assertEquals(j + 1, my_layout.at(0, j));
 		}
-		// What if length = 0?
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testLayoutIntException() {
+		new Layout(0);
 	}
 
 	@Test
@@ -112,8 +122,6 @@ public class LayoutTest {
 		assertEquals(layout_three, rotated_thrice);
 		Layout rotated_fourth = rotated_thrice.rotateRight();
 		assertEquals(rotated_fourth, first_layout);
-		
-		// Maybe try length 0?
 	}
 
 	@Test
@@ -234,12 +242,6 @@ public class LayoutTest {
 						   {10, 11, 12, 16} };
 		Layout joined_layout = new Layout(joined);
 		assertEquals(joined_layout, first_layout.join(second_layout));
-		int[][] empty_array = { {},
-								{},
-								{},
-								{} };
-		Layout empty_layout = new Layout(empty_array);
-		assertEquals(first_layout, first_layout.join(empty_layout));
 	}
 	
 	@Test(expected=IllegalArgumentException.class)
@@ -470,7 +472,7 @@ public class LayoutTest {
 	public void testToArray2D() {
 		Layout first = new Layout(first_array);
 		int[][] answer = { {1, 2, 3}, {4, 5, 6}, {7, 8, 9}, {10, 11, 12} };
-		assertTrue(answer == first.toArray2D());
+		assertTrue(Arrays.deepEquals(answer, first.toArray2D()));
 	}
 
 	@Test
