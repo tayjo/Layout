@@ -1,11 +1,13 @@
 package layout;
 
 public class Layout {
-	
-	public int[][] contents;
+private int[][] contents;
 	
 	public Layout(int[][] array){
 		//Creates a Layout containing a copy of the given array.
+		if (array.length == 0 || array[0].length == 0) {
+			throw new IllegalArgumentException();
+		}
 		contents = new int[array.length][array[0].length];
 		for (int i = 0; i < array.length; i++){
 			for (int j = 0; j < array[i].length; j++){
@@ -16,6 +18,7 @@ public class Layout {
 	
 	public Layout(int[] array){
 		//Creates a Layout containing the given array.
+		if (array.length == 0) throw new IllegalArgumentException();
 		contents = new int[1][array.length];
 		for (int j = 0; j < array.length; j++) {
 			contents[0][j] = array[j];
@@ -32,7 +35,14 @@ public class Layout {
 	
 	public Layout reverse(){
 		//2 Returns a new Layout whose values are in the reverse order of those in the given Layout.
-		return null;
+		int[][] reversed = new int[this.rowCount()][this.columnCount()];
+		for (int i = 0; i < this.rowCount(); i++) {
+			for (int j = 0; j < this.columnCount(); j++) {
+				reversed[i][j] = contents[i][this.columnCount() - j - 1];
+			}
+		}
+		Layout reversed_layout = new Layout(reversed);
+		return reversed_layout;
 	}
 	
 	public Layout rotateRight(){
@@ -50,7 +60,15 @@ public class Layout {
 
 	public Layout rotateLeft(){
 		//4 Returns a new Layout which is "rotated" a quarter-turn counterclockwise.
-		return null;
+		if (contents.length == 0) return this;
+		int[][] rotated = new int[columnCount()][rowCount()];
+		for (int i = 0; i < rotated.length; i++) {
+			for (int j = 0; j < rotated[0].length; j++) {
+				rotated[i][j] = this.at(j, this.columnCount() - 1 - i);
+			}
+		}
+		Layout rotated_layout = new Layout(rotated);
+		return rotated_layout;
 	}
 
 	public Layout transpose(){
@@ -68,7 +86,19 @@ public class Layout {
 	
 	public Layout ravel(int n){
 		//6 Takes a one-dimensional Layout of m × n numbers and returns a two-dimensional Layout of m rows and n columns. The first n numbers of the given Layout are copied into the first row of the new Layout, the second n numbers into the second row, and so on. This method throws an IllegalArgumentException if the length of the input Layout is not evenly divisible by n.
-		return null;
+		if (n == 0) throw new IllegalArgumentException();
+		int new_row_count = columnCount() / n;
+		if (columnCount() % n != 0) throw new IllegalArgumentException();
+		int[][] ravelled_array = new int[new_row_count][n];
+		int current = 0;
+		for (int i = 0; i < new_row_count; i++) {
+			for (int j = 0; j < n; j++) {
+				ravelled_array[i][j] = at(0, current);
+				current++;
+			}
+		}
+		Layout return_layout = new Layout(ravelled_array);
+		return return_layout;
 	}
 
 	public Layout unravel(){
@@ -78,7 +108,11 @@ public class Layout {
 
 	public Layout reshape(int n){
 		//8 Takes a two-dimensional array of r rows and c columns and reshapes it to have n columns by (r*c)/n rows. This method throws an IllegalArgumentException if r*c is not evenly divisible by n.
-		return null;
+		int r_times_c = rowCount() * columnCount();
+		if (n == 0 || r_times_c % n != 0) throw new IllegalArgumentException();
+		Layout unravelled = this.unravel();
+		Layout reshaped = unravelled.ravel(n);
+		return reshaped;
 	}
 
 	public Layout join(Layout layout){
@@ -88,7 +122,22 @@ public class Layout {
 	
 	public Layout stack(Layout layout){
 		//10 Forms a new Layout with n rows and m1+m2 columns by putting the recipient Layout with n1 rows and m columns on top of the parameter Layout of n2 rows and m columns. This method throws an IllegalArgumentException if the input Layouts do not have the same number of columns.
-		return null;
+		if (layout.columnCount() != this.columnCount()) {
+			throw new IllegalArgumentException();
+		}
+		int[][] result = new int[layout.rowCount() + this.rowCount()][columnCount()];
+		for (int i = 0; i < rowCount(); i++) {
+			for (int j = 0; j < columnCount(); j++) {
+				result[i][j] = this.contents[i][j];
+			}
+		}
+		for (int k = 0; k < layout.rowCount(); k++) {
+			for (int m = 0; m < layout.columnCount(); m++) {
+				result[rowCount() + k][m] = layout.contents[k][m];
+			}
+		}
+		Layout stacked = new Layout(result);
+		return stacked;
 	}
 	
 	public int rowCount(){
@@ -108,7 +157,16 @@ public class Layout {
 
 	public Layout columns(int firstColumn, int lastColumn){
 		//14 Returns a new Layout containing values from column firstColumn to column lastColumn, inclusive, of the recipient Layout.
-		return null;
+		if (lastColumn < firstColumn) throw new IllegalArgumentException();
+		int new_columns = lastColumn - firstColumn + 1;
+		int[][] answer_array = new int[rowCount()][new_columns];
+		for (int i = 0; i < rowCount(); i++) {
+			for (int j = 0; j < new_columns; j++) {
+				answer_array[i][j] = at(i, firstColumn + j);
+			}
+		}
+		Layout answer = new Layout(answer_array);
+		return answer;
 	}
 
 	public Layout slice(int firstRow, int lastRow, int firstColumn, int lastColumn){
@@ -118,7 +176,26 @@ public class Layout {
 
 	public Layout replace(Layout layout, int row, int column){
 		//16 Returns a new Layout in which the parameter layout replaces the values of the recipient Layout, starting at the given row and column. This method throws an IllegalArgumentException if the parameter Layout would go beyond the bounds of the recipient layout.
-		return null;
+		if (row > column) throw new IllegalArgumentException();
+		int final_row = layout.rowCount() + row;
+		int final_column = layout.columnCount() + column;
+		if (final_row > this.rowCount() || final_column > this.columnCount()) {
+			throw new IllegalArgumentException();
+		}
+		int[][] answer_array = new int[rowCount()][columnCount()];
+		for (int i = 0; i < rowCount(); i++) {
+			for (int j = 0; j < columnCount(); j++) {
+				if (row <= i && i < final_row) {
+					if (column <= j && j < final_column) {
+						answer_array[i][j] = layout.at(i - row, j - column);
+						continue;
+					}
+				}
+				answer_array[i][j] = this.at(i, j);
+			}
+		}
+		Layout answer = new Layout(answer_array);
+		return answer;
 	}
 
 	@Override
@@ -144,7 +221,7 @@ public class Layout {
 	@Override
 	public int hashCode(){
 		//18 Arrays have a hashCode method. Your Layout object contains an array. This method should return the hashCode of that array. Don't ask why, just do it.
-		return 0;
+		return this.contents.hashCode();
 	}
 	
 	public int[] toArray1D(){
@@ -154,7 +231,13 @@ public class Layout {
 	
 	public int[][] toArray2D(){
 		//20 Returns a copy of the two-dimensional array of the values in the recipient Layout. If the Layout is one-dimensional, the result will be an array containing, as its single element, a one-dimensional array. (Do not return the actual array; make a copy. If you were to return the actual array, and someone were to change some value in the array, that would change the value in the Layout. That violates our intention to make Layouts immutable.)
-		return null;
+		int[][] result = new int[rowCount()][columnCount()];
+		for (int i = 0; i < rowCount(); i++) {
+			for (int j = 0; j < columnCount(); j++) {
+				result[i][j] = this.at(i, j);
+			}
+		}
+		return result;
 	}
 	
 	public int at(int row, int column){
