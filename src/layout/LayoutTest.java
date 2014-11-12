@@ -8,11 +8,13 @@ import org.junit.Test;
 public class LayoutTest {
 	
 	int[][] first_array = { {1, 2, 3},
-			{4, 5, 6},
-			{7, 8, 9},
-			{10, 11, 12} };
+							{4, 5, 6},
+							{7, 8, 9},
+							{10, 11, 12} };
+	Layout first_layout = new Layout(first_array);
 	int[][] empty = {};
-	
+
+
 	@Before
 	public void setUp() throws Exception {
 	}
@@ -41,7 +43,19 @@ public class LayoutTest {
 		assertNotEquals(my_array[0][0], my_layout.at(0, 0));
 		// What if my_array.length = 0?
 	}
-
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testLayoutIntArrayArrayException1() {
+		int[][] zero_rows = new int[0][5];
+		new Layout(zero_rows);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testLayoutIntArrayArrayException2() {
+		int[][] zero_cols = new int[5][0];
+		new Layout(zero_cols);
+	}
+	
 	@Test
 	public void testLayoutIntArray() {
 		int[] my_1d_array = {1, 2, 3, 4, 5};
@@ -77,7 +91,6 @@ public class LayoutTest {
 
 	@Test
 	public void testRotateRight() {
-		Layout first_layout = new Layout(first_array);
 		int[][] one_rotate = { {10, 7, 4, 1},
 							   {11, 8, 5, 2},
 							   {12, 9, 6, 3} };
@@ -135,15 +148,20 @@ public class LayoutTest {
 
 	@Test
 	public void testTranspose() {
-		Layout first_layout = new Layout(first_array);
-		int[][] second_array = { {1, 4, 7, 10},
+		int[][] transpose = { {1, 4, 7, 10},
 						 		 {2, 5, 8, 11},
 						 		 {3, 6, 9, 12} };
+		Layout transpose_layout = new Layout(transpose);
+		assertEquals(first_layout.transpose(), transpose_layout);
+		int[][] second_array = { {1, 2, 3, 4, 5} };
 		Layout second_layout = new Layout(second_array);
-		Layout transpose_layout = first_layout.transpose();
-		assertEquals(second_layout, transpose_layout);
-
-		// Maybe try other dimensions or length 0?
+		int[][] transpose2 = { {1},
+							   {2},
+							   {3},
+							   {4},
+							   {5} };
+		Layout transpose2_layout = new Layout(transpose2);
+		assertEquals(transpose2_layout, second_layout.transpose());
 	}
 
 	@Test
@@ -176,7 +194,9 @@ public class LayoutTest {
 
 	@Test
 	public void testUnravel() {
-		fail("Not yet implemented");
+		int[] unraveled = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+		Layout unraveled_layout = new Layout(unraveled);
+		assertEquals(first_layout.unravel(), unraveled_layout);
 	}
 
 	@Test
@@ -203,7 +223,32 @@ public class LayoutTest {
 
 	@Test
 	public void testJoin() {
-		fail("Not yet implemented");
+		int[][] second_array = { {13},
+								 {14},
+								 {15},
+								 {16} };
+		Layout second_layout = new Layout(second_array);
+		int[][] joined = { {1, 2, 3, 13},
+						   {4, 5, 6, 14},
+						   {7, 8, 9, 15},
+						   {10, 11, 12, 16} };
+		Layout joined_layout = new Layout(joined);
+		assertEquals(joined_layout, first_layout.join(second_layout));
+		int[][] empty_array = { {},
+								{},
+								{},
+								{} };
+		Layout empty_layout = new Layout(empty_array);
+		assertEquals(first_layout, first_layout.join(empty_layout));
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testJoinException() {
+		int[][] second_array = { {1, 2, 3},
+								 {4, 5, 6},
+								 {7, 8, 9} };
+		Layout second_layout = new Layout(second_array);
+		first_layout.join(second_layout);
 	}
 
 	@Test
@@ -230,8 +275,11 @@ public class LayoutTest {
 
 	@Test
 	public void testRowCount() {
-		Layout first = new Layout(first_array);
-		assertEquals(4, first.rowCount());
+		assertEquals(4, first_layout.rowCount());
+		int[][] second_array = { {1, 2, 3},
+								 {4, 5, 6} };
+		Layout second_layout = new Layout(second_array);
+		assertEquals(2, second_layout.rowCount());
 	}
 
 	@Test
@@ -242,9 +290,27 @@ public class LayoutTest {
 
 	@Test
 	public void testRows() {
-		fail("Not yet implemented");
+		int[][] rows = { {4, 5, 6},
+						 {7, 8, 9} };
+		Layout rows_layout = new Layout(rows);
+		assertEquals(rows_layout, first_layout.rows(1, 2));
 	}
 
+	@Test(expected=IllegalArgumentException.class)
+	public void testRowsException1() {
+		first_layout.rows(-1, 2);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testRowsException2() {
+		first_layout.rows(2, 5);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testRowsException3() {
+		first_layout.rows(2, 1);
+	}
+	
 	@Test
 	public void testColumns() {
 		Layout first = new Layout(first_array);
@@ -263,9 +329,24 @@ public class LayoutTest {
 		first.columns(2,  1);
 	}
 
-	@Test
-	public void testSlice() {
-		fail("Not yet implemented");
+	@Test(expected=IllegalArgumentException.class)
+	public void testSliceException1() {
+		first_layout.slice(-1, 2, 1, 2);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testSliceException2() {
+		first_layout.slice(3, 2, 1, 2);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testSliceException3() {
+		first_layout.slice(0, 2, 1, 5);
+	}
+
+	@Test(expected=IllegalArgumentException.class)
+	public void testSliceException4() {
+		first_layout.slice(0, 2, 2, 0);
 	}
 
 	@Test
@@ -355,12 +436,34 @@ public class LayoutTest {
 	
 	@Test
 	public void testEqualsObject() {
-		fail("Not yet implemented");
+		int[][] second_array = { {1, 2, 3},
+								 {4, 5, 6},
+								 {7, 8, 9},
+								 {10, 11, 12} };
+		Layout second_layout = new Layout(second_array);
+		assertTrue(first_layout.equals(second_layout));
+		int[][] third_array = { {1, 2, 3, 4},
+								{5, 6, 7, 8},
+								{9, 10, 11, 12} };
+		Layout third_layout = new Layout(third_array);
+		assertFalse(first_layout.equals(third_layout));
 	}
 
 	@Test
 	public void testToArray1D() {
-		fail("Not yet implemented");
+		int[] first_array_1d = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12};
+		for (int i = 0; i < first_layout.rowCount(); i++) {
+			for (int j = 0; j < first_layout.columnCount(); j++) {
+				assertEquals(first_array_1d[i * first_layout.columnCount() + j], first_layout.at(i, j));
+			}
+		}
+		int[] second_array = {5, 4, 3, 2, 1};
+		Layout second_layout = new Layout(second_array);
+		for (int i = 0; i < second_layout.rowCount(); i++) {
+			for (int j = 0; j < second_layout.columnCount(); j++) {
+				assertEquals(second_array[i * second_layout.columnCount() + j], second_layout.at(i, j));
+			}
+		}
 	}
 
 	@Test
@@ -372,9 +475,18 @@ public class LayoutTest {
 
 	@Test
 	public void testAt() {
-		Layout first = new Layout(first_array);
-		assertEquals(1, first.at(0,  0));
-		assertEquals(12, first.at(3, 2));
+		assertEquals(4, first_layout.at(1,0));
+		assertEquals(9, first_layout.at(2,2));
+		assertEquals(11, first_layout.at(3, 1));
 	}
 
+	@Test(expected=IllegalArgumentException.class)
+	public void testAtException1() {
+		first_layout.at(-1, 0);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testAtException2() {
+		first_layout.at(2, 5);
+	}
 }

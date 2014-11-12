@@ -27,6 +27,7 @@ private int[][] contents;
 	
 	public Layout(int length){
 		//1 Creates an Layout of length integers, and fills it with the numbers 1 to length.
+		if (length == 0) throw new IllegalArgumentException();
 		contents = new int[1][length];
 		for (int j = 0; j < length; ) {
 			contents[0][j] = ++j;
@@ -51,7 +52,7 @@ private int[][] contents;
 		Layout rotated_layout;
 		for (int i = 0; i < rotated.length; i++) {
 			for (int j = 0; j < rotated[0].length; j++) {
-				rotated[i][j] = at(rotated[0].length - 1 - j, i);
+				rotated[i][j] = at(rowCount() - 1 - j, i);
 			}
 		}
 		rotated_layout = new Layout(rotated);
@@ -103,7 +104,14 @@ private int[][] contents;
 
 	public Layout unravel(){
 		//7 Takes a m by n two dimensional Layout and returns a one-dimensional Layout of size m × n containing the same numbers. The first n numbers of the new Layout are copied from the first row of the given Layout, the second n numbers from the second row, and so on.
-		return null;
+		int[] unraveled = new int[rowCount() * columnCount()];
+		for (int i = 0; i < rowCount(); i++) {
+			for (int j = 0; j < columnCount(); j++) {
+				unraveled[i * columnCount() + j] = at(i, j);
+			}
+		}
+		Layout unraveled_layout = new Layout(unraveled);
+		return unraveled_layout;
 	}
 
 	public Layout reshape(int n){
@@ -117,7 +125,18 @@ private int[][] contents;
 
 	public Layout join(Layout layout){
 		//9 Adjoins a Layout with n rows and m1 columns to the parameter Layout with n rows and m2 columns, forming a new Layout with n rows and m1+m2 columns. This method throws an IllegalArgumentException if the input Layouts do not have the same number of rows.
-		return null;
+		if (rowCount() != layout.rowCount()) throw new IllegalArgumentException();
+		int[][] joined = new int[rowCount()][columnCount() + layout.columnCount()];
+		for (int i = 0; i < rowCount(); i++){
+			for (int j = 0; j < columnCount(); j++) {
+				joined[i][j] = at(i, j);
+			}
+			for (int j = columnCount(); j < joined[0].length; j++) {
+				joined[i][j] = layout.at(i, j - columnCount());
+			}
+		}
+		Layout joined_layout = new Layout(joined);
+		return joined_layout;
 	}
 	
 	public Layout stack(Layout layout){
@@ -152,7 +171,17 @@ private int[][] contents;
 	
 	public Layout rows(int firstRow, int lastRow){
 		//13 Returns a new Layout containing values from row firstRow to row lastRow, inclusive, of the recipient Layout.
-		return null;
+		if (firstRow < 0 || (lastRow >= rowCount()) || (lastRow < firstRow)) {
+			throw new IllegalArgumentException();
+		}
+		int[][] rows = new int[lastRow - firstRow + 1][columnCount()];
+		for (int i = firstRow; i <= lastRow; i++) {
+			for (int j = 0; j < columnCount(); j++) {
+				rows[i - firstRow][j] = at(i, j);
+			}
+		}
+		Layout rows_layout = new Layout(rows);
+		return rows_layout;
 	}
 
 	public Layout columns(int firstColumn, int lastColumn){
@@ -171,7 +200,7 @@ private int[][] contents;
 
 	public Layout slice(int firstRow, int lastRow, int firstColumn, int lastColumn){
 		//15 Returns a new Layout containing values from the given portion of the recipient Layout.
-		return null;
+		return rows(firstRow, lastRow).columns(firstColumn, lastColumn);
 	}
 
 	public Layout replace(Layout layout, int row, int column){
@@ -226,7 +255,18 @@ private int[][] contents;
 	
 	public int[] toArray1D(){
 		//19 Returns a one-dimensional array of the values in the recipient Layout. If the Layout is two-dimensional, it is first unraveled.
-		return null;
+		int[] array_1d = new int[rowCount() * columnCount()];
+		Layout layout_1d;
+		if (rowCount() == 1) {
+			for (int i = 0; i < array_1d.length; i++) {
+				array_1d[i] = contents[0][i];
+			}
+		}
+		else {
+			layout_1d = unravel();
+			array_1d = layout_1d.toArray1D();
+		}
+		return array_1d;
 	}
 	
 	public int[][] toArray2D(){
@@ -242,6 +282,9 @@ private int[][] contents;
 	
 	public int at(int row, int column){
 		//21 Returns the integer at the given row and column.
+		if (row < 0 || (row >= rowCount()) || (column < 0) || (column >= columnCount())) {
+			throw new IllegalArgumentException();
+		}
 		return contents[row][column];
 	}
 }
