@@ -3,8 +3,6 @@ package layout;
 import static org.junit.Assert.*;
 
 import java.util.Arrays;
-
-import org.junit.Before;
 import org.junit.Test;
 
 public class LayoutTest {
@@ -15,11 +13,6 @@ public class LayoutTest {
 							{10, 11, 12} };
 	Layout first_layout = new Layout(first_array);
 	int[][] empty = {};
-
-
-	@Before
-	public void setUp() throws Exception {
-	}
 
 	@Test
 	public void testHashCode() {
@@ -426,7 +419,8 @@ public class LayoutTest {
 									{11, 12, 13, 14, 15},
 									{16, 17, 18, 19, 20} };
 		Layout original = new Layout(original_array);
-		int[][] input_array = { {55, 66, 77, 78, 79, 80}, {88, 99, 100, 101, 102, 103} };
+		int[][] input_array = { {55, 66, 77, 78, 79, 80}, 
+								{88, 99, 100, 101, 102, 103} };
 		Layout input = new Layout(input_array);
 		int[][] answer_array = { {1, 2, 3, 4, 5},
 								{6, 7, 55, 66, 77},
