@@ -1,3 +1,6 @@
+// Assignment 10 - Layout
+// Authors: Theresa Breiner and Josh Taylor
+
 package layout;
 
 import static org.junit.Assert.*;
@@ -50,6 +53,12 @@ public class LayoutTest {
 		new Layout(zero_cols);
 	}
 	
+	@Test(expected=IllegalArgumentException.class)
+	public void testLayoutIntArrayArrayException3() {
+		int[][] null_2d_array = null;
+		new Layout(null_2d_array);
+	}
+	
 	@Test
 	public void testLayoutIntArray() {
 		int[] my_1d_array = {1, 2, 3, 4, 5};
@@ -66,6 +75,12 @@ public class LayoutTest {
 		int[] empty_1d_array = {};
 		new Layout(empty_1d_array);
 	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testLayoutIntArrayException2() {
+		int[] null_1d_array = null;
+		new Layout(null_1d_array);
+	}
 
 	@Test
 	public void testLayoutInt() {
@@ -79,6 +94,11 @@ public class LayoutTest {
 	@Test(expected=IllegalArgumentException.class)
 	public void testLayoutIntException() {
 		new Layout(0);
+	}
+	
+	@Test(expected=IllegalArgumentException.class)
+	public void testLayoutIntException2() {
+		new Layout(-5);
 	}
 
 	@Test

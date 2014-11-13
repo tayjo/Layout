@@ -1,11 +1,16 @@
+// Assignment 10 - Layout
+// Authors: Theresa Breiner and Josh Taylor
+
 package layout;
+
+import java.util.Arrays;
 
 public class Layout {
 private int[][] contents;
 	
 	public Layout(int[][] array){
 		// Creates a Layout containing a copy of the given array.
-		if (array.length == 0 || array[0].length == 0) {
+		if (array == null || array.length == 0 || array[0].length == 0) {
 			throw new IllegalArgumentException();
 		}
 		contents = new int[array.length][array[0].length];
@@ -18,7 +23,7 @@ private int[][] contents;
 	
 	public Layout(int[] array){
 		// Creates a Layout containing the given array.
-		if (array.length == 0) throw new IllegalArgumentException();
+		if (array == null || array.length == 0) throw new IllegalArgumentException();
 		contents = new int[1][array.length];
 		for (int j = 0; j < array.length; j++) {
 			contents[0][j] = array[j];
@@ -28,7 +33,7 @@ private int[][] contents;
 	public Layout(int length){
 		// Creates an Layout of length integers,
 		// and fills it with the numbers 1 to length.
-		if (length == 0) throw new IllegalArgumentException();
+		if (length <= 0) throw new IllegalArgumentException();
 		contents = new int[1][length];
 		for (int j = 0; j < length; ) {
 			contents[0][j] = ++j;
@@ -285,7 +290,7 @@ private int[][] contents;
 	public int hashCode(){
 		// Arrays have a hashCode method. Your Layout object contains an array.
 		// This method should return the hashCode of that array.
-		return this.contents.hashCode();
+		return Arrays.deepHashCode(contents);
 	}
 	
 	public int[] toArray1D(){
